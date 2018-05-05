@@ -1,11 +1,10 @@
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:8000');
 
-function subscribeToTimer() {
-  console.log('wtf');
+function subscribeToTimer(cb) {
   socket.emit('getMissions');
   socket.on('missions', (missions) => {
-    console.log('WTF', missions);
+    cb(null, missions);
   });
 
 }
