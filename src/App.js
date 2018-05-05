@@ -1,36 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import Router from 'Router';
+import store from './Redux/store';
 
-import './App.css';
-import { subscribeToTimer } from './api';
-import Map from './Map';
-class App extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      missions: []
-    }
-  }
-
-  componentDidMount() {
-    subscribeToTimer(((error, res) => {
-      this.setState({
-        missions: res
-      })
-    }));
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <Map missions={this.state.missions}/>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <Provider store={store}>
+    <Router />
+  </Provider>
+);
 
 export default App;

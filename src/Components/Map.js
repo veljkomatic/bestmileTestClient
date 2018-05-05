@@ -1,11 +1,15 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { withGoogleMap, GoogleMap, DirectionsRenderer } from 'react-google-maps';
+
+import { subscirbeToMissions } from '../Redux/actionCreators';
 
 class Map extends PureComponent  {
 
     constructor(props) {
         super(props);
-        this.renderDirections =this.renderDirections.bind(this);
+        this.props.subscirbeToMissions();
+        this.renderDirections = this.renderDirections.bind(this);
         this.state = {
             directions: null
         }
@@ -80,5 +84,9 @@ class Map extends PureComponent  {
         );
     }
 };
-export default Map;
 
+const mapStateToProps = ({ missions }) => ({
+    activeMissions: missions.missionsData
+});
+
+export default connect(mapStateToProps, { subscirbeToMissions })(Map);
