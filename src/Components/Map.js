@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withGoogleMap, GoogleMap, DirectionsRenderer } from 'react-google-maps';
 
 import { subscirbeToMissions } from '../Redux/actionCreators';
-
+import GoogleMapHOC from './googleMapHOC';
 class Map extends PureComponent  {
 
     constructor(props) {
@@ -64,21 +64,12 @@ class Map extends PureComponent  {
         )
     }
      render() {
-        const GoogleMapExample = withGoogleMap(props => (
-            <GoogleMap
-            defaultCenter = { { lat: 40.730610, lng: -73.935242 } }
-            defaultZoom = { 12 }
-            >
-            <div>
-            <DirectionsRenderer preserveViewport={true} directions={this.state.directions} />
-            </div>
-            </GoogleMap>
-        ));
         return(
             <div>
-            <GoogleMapExample
+            <GoogleMapHOC
                 containerElement={ <div style={{ height: `1000px`, width: '1000px' }} /> }
                 mapElement={ <div style={{ height: `100%` }} /> }
+                missions={ this.props.activeMissions }
             />
             </div>
         );
