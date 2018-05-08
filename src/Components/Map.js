@@ -1,80 +1,48 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { withGoogleMap, GoogleMap, DirectionsRenderer } from 'react-google-maps';
 
 import { subscirbeToMissions } from '../Redux/actionCreators';
-import GoogleMapHOC from './googleMapHOC';
 class Map extends PureComponent  {
 
     constructor(props) {
         super(props);
         this.props.subscirbeToMissions();
-        this.renderDirections = this.renderDirections.bind(this);
-        this.state = {
-            directions: null
+    }
+
+    componentDidMount() {
+        const NewYork = new window.google.maps.LatLng(40.730610, -73.935242);
+        const mapOptions = {
+          zoom: 12,
+          center: NewYork
+        }
+        this.map = new window.google.maps.Map(this.refs.map, mapOptions);
+    }
+
+    componentWillReceiveProps(newProps) {
+        if(newProps.activeMissions.length !== this.props.activeMissions.length) {
+            newProps.activeMissions.forEach(element => {
+                const newActiveMissionsLength = newProps.activeMissions.length;
+                const directionsRenderer = new window.google.maps.DirectionsRenderer();
+                directionsRenderer.setMap(this.map);
+                directionsRenderer.setOptions({ preserveViewport: true });
+                directionsRenderer.setDirections(newProps.activeMissions[newActiveMissionsLength-1].computeRoutes);
+            });
         }
     }
 
-    // componentDidMount() {
-    //     const DirectionsService = new google.maps.DirectionsService();
-    //     var bounds = new google.maps.LatLngBounds( {
-    //         "lat": 41.85073,
-    //         "lng": -87.6514055
-    //     }, {
-    //         "lat": 41.8525704,
-    //         "lng": -87.65126219999999
-    //     });
-
-
-    //     DirectionsService.route({
-    //       origin: new google.maps.LatLng(41.8507300, -87.6512600),
-    //       destination: new google.maps.LatLng(41.8525800, -87.6514100),
-    //       travelMode: google.maps.TravelMode.DRIVING,
-    //     }, (result, status) => {
-    //       if (status === google.maps.DirectionsStatus.OK) {
-    //         console.log('result ', result);
-    //         this.setState({
-    //           directions: result,
-    //         });
-    //       } else {
-    //         console.error(`error fetching directions ${result}`);
-    //       }
-    //     });
-    // }
-
-    renderDirections() {
-        const google = window.google;
-        return (
-            <div>
-                {this.props.missions.map((mission) => {
-                    const newRoutes = mission.routes.routes.map((el) => {
-                        const newBounds = new google.maps.LatLngBounds(el.bounds.southwest, el.bounds.northeast);
-                        return {
-                            ...el,
-                            bounds: newBounds
-                        }
-                    });
-                    mission.routes.routes = newRoutes;
-                    return (
-                        <DirectionsRenderer preserveViewport={true} directions={mission.routes} />
-                    )
-                }
-            )}
-            </div>
-        )
-    }
      render() {
         return(
             <div>
-            <GoogleMapHOC
-                containerElement={ <div style={{ height: `1000px`, width: '1000px' }} /> }
-                mapElement={ <div style={{ height: `100%` }} /> }
-                missions={ this.props.activeMissions }
-            />
+                <div style={mapStyle} ref="map"></div>
             </div>
         );
     }
 };
+
+const mapStyle = {
+    height: '1000px',
+    width: '100%'
+}
 
 const mapStateToProps = ({ missions }) => ({
     activeMissions: missions.missionsData

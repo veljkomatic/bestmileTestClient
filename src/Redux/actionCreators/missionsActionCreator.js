@@ -5,6 +5,7 @@ const socket = openSocket('http://localhost:8000');
 
 export const subscirbeToMissions = () => dispatch => {
 	socket.emit('getMissions');
+
 	socket.on('newStartingMission', (newStartingMission) => {
 		dispatch({ type: actionTypes.NEW_STARTING_MISSION, payload: newStartingMission });
 	});
