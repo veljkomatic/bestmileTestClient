@@ -4,11 +4,6 @@ import { connect } from 'react-redux';
 import { subscirbeToMissions } from '../Redux/actionCreators';
 class Map extends PureComponent  {
 
-    constructor(props) {
-        super(props);
-        this.props.subscirbeToMissions();
-    }
-
     componentDidMount() {
         const NewYork = new window.google.maps.LatLng(40.730610, -73.935242);
         const mapOptions = {
@@ -16,6 +11,7 @@ class Map extends PureComponent  {
           center: NewYork
         }
         this.map = new window.google.maps.Map(this.refs.map, mapOptions);
+        this.props.subscirbeToMissions();
     }
 
     componentWillReceiveProps(newProps) {
