@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { subscirbeToMissions } from '../Redux/actionCreators';
+import { subscribeToMissions } from '../Redux/actionCreators';
 class Map extends PureComponent  {
 
     componentDidMount() {
@@ -11,7 +11,7 @@ class Map extends PureComponent  {
           center: NewYork
         }
         this.map = new window.google.maps.Map(this.refs.map, mapOptions);
-        this.props.subscirbeToMissions();
+        this.props.subscribeToMissions();
     }
 
     componentWillReceiveProps(newProps) {
@@ -29,6 +29,11 @@ class Map extends PureComponent  {
      render() {
         return(
             <div>
+                <div>
+                    <p>Number of passenger transported: {this.props.passengerTransported}</p>
+                    <p>Distance covered by the fleet: {this.props.distanceCovered}</p>
+                    <p>Average trip length: {this.props.avgTripLength}</p> 
+                </div>
                 <div style={mapStyle} ref="map"></div>
             </div>
         );
@@ -41,7 +46,10 @@ const mapStyle = {
 }
 
 const mapStateToProps = ({ missions }) => ({
-    activeMissions: missions.missionsData
+    activeMissions: missions.missionsData,
+    passengerTransported: missions.passengerTransported,
+	distanceCovered: missions.distanceCovered,
+	avgTripLength: missions.avgTripLength
 });
 
-export default connect(mapStateToProps, { subscirbeToMissions })(Map);
+export default connect(mapStateToProps, { subscribeToMissions })(Map);
