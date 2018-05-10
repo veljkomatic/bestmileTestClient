@@ -13,14 +13,14 @@ export default (state = INITIAL_STATE, action) => {
 		case actionTypes.NEW_STARTING_MISSION:
 			return {
 				...state,
-				avgTripLength: (state.avgTripLength * state.missionsData.length + parseFloat(action.payload.Trip_distance)) / (state.missionsData.length + 1),
+				avgTripLength: (state.avgTripLength * state.missionsData.length + parseFloat(action.payload.tripDistance)) / (state.missionsData.length + 1),
 				missionsData: [...state.missionsData, action.payload],
 			};
 		case actionTypes.FINISHED_MISSION:
 			return {
 				...state,
-				passengerTransported: state.passengerTransported + parseInt(action.payload.Passenger_count, 10),
-				distanceCovered: state.distanceCovered + parseFloat(action.payload.Trip_distance),
+				passengerTransported: state.passengerTransported + parseInt(action.payload.passengerCount, 10),
+				distanceCovered: state.distanceCovered + parseFloat(action.payload.tripDistance),
 				missionsData: state.missionsData.filter((el) => el.id !== action.payload.id)
 			};
 		default:
